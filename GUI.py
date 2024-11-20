@@ -2,12 +2,19 @@ import tkinter as tk
 from tkinter import StringVar, Radiobutton, Menu
 from add_data_to_file import add_data_to_json  # This is the function to add data to the JSON file
 import os
+import yaml
 
 
 class SimpleGUI:
     def __init__(self, root):
         self.root = root
-        self.root.title("Text Input GUI")
+        
+        # Load available languages and their translations
+        self.languages = {}
+        self.load_all_languages()
+        self.current_language = "english"  # Default language
+        
+        self.root.title(self.languages[self.current_language]["window_title"])
         
         # Set icon if available
         icon_path = "./SentencesFile/app_icon.png"
@@ -21,6 +28,31 @@ class SimpleGUI:
         self.create_theme_menu()
         self.create_output_format()
         self.create_submit_button()
+
+    def load_all_languages(self):
+        """Load all language files from the languages directory"""
+        languages_dir = "languages"
+        try:
+            for filename in os.listdir(languages_dir):
+                if filename.endswith('.yaml'):
+                    language_name = filename[:-5].lower()  # Remove .yaml and convert to lowercase
+                    file_path = os.path.join(languages_dir, filename)
+                    with open(file_path, 'r', encoding='utf-8') as file:
+                        self.languages[language_name] = yaml.safe_load(file)
+        except Exception as e:
+            print(f"Error loading language files: {e}")
+            # Provide basic fallback
+            self.languages = {
+                "english": {
+                    "window_title": "Text Input GUI",
+                    "insert_text": "Insert text here",
+                    "author": "Author",
+                    "output": "Output",
+                    "submit": "Submit",
+                    "documentation": "Documentation",
+                    "about": "About"
+                }
+            }
 
     def create_menu(self):
         # Create the menu bar
@@ -40,8 +72,14 @@ class SimpleGUI:
         self.path_menu.add_command(label="Open Directory")
         self.path_menu.add_command(label="Set Output extension")
 
-        self.language_menu.add_command(label="English")
-        self.language_menu.add_command(label="Spanish")
+        # Add language options dynamically based on available language files
+        for language in self.languages.keys():
+            # Capitalize first letter for display
+            display_name = language.capitalize()
+            self.language_menu.add_command(
+                label=display_name, 
+                command=lambda lang=language: self.change_language(lang)
+            )
 
         self.help_menu.add_command(label="Documentation")
         self.help_menu.add_command(label="About")
@@ -132,6 +170,22 @@ class SimpleGUI:
         self.author_entry.delete(0, tk.END)
         for theme_var in self.theme_vars:
             theme_var.set(self.themes[0])
+
+    def change_language(self, language):
+        """Update the GUI text elements to the selected language"""
+        self.current_language = language
+        translations = self.languages[language]
+        
+        # Update all text elements
+        self.root.title(translations["window_title"])
+        self.text_label.config(text=translations["insert_text"])
+        self.author_label.config(text=translations["author"])
+        self.output_format_label.config(text=translations["output"])
+        self.submit_button.config(text=translations["submit"])
+        
+        # Update menu items
+        self.help_menu.entryconfig(0, label=translations["documentation"])
+        self.help_menu.entryconfig(1, label=translations["about"])
 
 
 # Run the GUI
