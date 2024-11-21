@@ -3,7 +3,7 @@ import os
 from language_detector import detect_language  # This is the language detector function
 from translate_script import traducir_texto # This is the translation function
 
-def add_data_to_json(data):
+def add_data_to_file(data):
     # Extract information from the input dictionary
     text = data.get('text', '').strip()
     author = data.get('author', '').strip()

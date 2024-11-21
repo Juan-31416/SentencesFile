@@ -6,13 +6,14 @@ import os
 import yaml
 from PopupWindow.OpenDirectory import browse_file
 from languages.load_languages import load_all_languages
+from Styles.GUI_Styles import configure_styles
 
 
 class SimpleGUI:
     def __init__(self, root):
         self.root = root
-        self.style = ttk.Style("cosmo")  # You can change the theme to "darkly", "flatly", "solar", among others
-        self.configure_custom_styles()
+        self.style = ttk.Style("cosmo")
+        configure_styles(self.style)
         
         # Load available languages and their translations
         self.languages = load_all_languages()
@@ -31,34 +32,6 @@ class SimpleGUI:
         self.create_author_entry()
         self.create_theme_menu()
         self.create_submit_button()
-
-    def configure_custom_styles(self):
-        """Configure custom styles for widgets"""
-        # Configure modern fonts
-        default_font = ("Roboto", 10)
-        header_font = ("Roboto", 12, "bold")
-        
-        self.style.configure("TLabel", font=default_font)
-        self.style.configure("TButton", 
-            font=default_font,
-            padding=10,
-            borderwidth=0,
-            borderradius=8
-        )
-        
-        # Custom submit button style
-        self.style.configure("Submit.TButton",
-            font=header_font,
-            padding=10,
-            borderwidth=0,
-            borderradius=8,
-            background="#00A3E0",
-            foreground="white"
-        )
-        self.style.map("Submit.TButton",
-            background=[("active", "#0088BF"), ("disabled", "#CCE5FF")],
-            foreground=[("disabled", "#666666")]
-        )
 
     def create_menu(self):
         # Create the menu bar
