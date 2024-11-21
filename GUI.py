@@ -4,8 +4,8 @@ from tkinter import StringVar, Menu, messagebox
 from WorkData.add_data_to_file import add_data_to_file  # This is the function to add data to the JSON file
 import os
 import yaml
-from Languages.load_languages import load_all_languages
-from Styles.GUI_Styles import configure_styles
+from Languages.load_languages import load_all_languages  # Import function to load language translations from YAML files
+from Styles.GUI_Styles import configure_styles  # Import function to configure custom styles for the GUI elements
 
 
 class SimpleGUI:
@@ -36,7 +36,7 @@ class SimpleGUI:
         self.root.title(self.languages[self.current_language]["window_title"])
         
         # Set the application icon if the file exists
-        icon_path = "./SentencesFile/app_icon.png"
+        icon_path = "./SentencesFile/img/app_icon.png"
         if os.path.exists(icon_path):
             self.root.iconphoto(True, ttk.PhotoImage(file=icon_path))
 
@@ -187,8 +187,8 @@ class SimpleGUI:
             return
         
         try:
-            # Try to add the data to the file
-            add_data_to_file(data)
+            # Pass both the data and current GUI language
+            add_data_to_file(data, self.current_language)
             # Show a success message if data is saved successfully
             messagebox.showinfo(
                 self.languages[self.current_language].get("success_title", "Success"),
@@ -258,6 +258,18 @@ class SimpleGUI:
         # Update the labels for language menu and help menu
         self.menubar.entryconfigure(0, label=translations["language_menu"])
         self.menubar.entryconfigure(1, label=translations["help_menu"])
+        
+        # Clear existing language menu items
+        self.language_menu.delete(0, "end")
+        
+        # Add updated language menu items
+        for language in self.languages.keys():
+            display_name = translations.get(f"language_{language}", language.capitalize())
+            self.language_menu.add_command(
+                label=display_name, 
+                command=lambda lang=language: self.change_language(lang)
+            )
+        
         # Update the labels for documentation and about menu items
         self.help_menu.entryconfigure(0, label=translations["documentation"])
         self.help_menu.entryconfigure(1, label=translations["about"])
