@@ -10,8 +10,10 @@ def browse_file():
     )
     if file_path:
         messagebox.showinfo("Success", f"File selected: {file_path}")
+        return file_path
     else:
         messagebox.showerror("Error", "No file selected.")
+        return None
 
 
 if __name__ == "__main__":

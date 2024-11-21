@@ -1,64 +1,75 @@
 import json
 import os
-from language_detector import detect_language  # This is the language detector function
-from translate_script import traducir_texto # This is the translation function
+from Languages.language_detector import detect_language  # This is the language detector function
+from WorkData.translate_script import translate_text # This is the translation function
 
 def add_data_to_file(data):
     # Extract information from the input dictionary
     text = data.get('text', '').strip()
     author = data.get('author', '').strip()
-    themes = data.get('themes', [])
-    output_format = data.get('output_format', 'json')
-    file_path = data.get('file_path', '').strip()
-
-    # If file path is empty, raise an error
-    if not file_path:
-        raise ValueError("File path is required.")
+    themes = data.get('theme', '')
 
     # Determine if the text is in Spanish or English
     language = detect_language(text)  # "spanish" or "english" expected
     
-    # Translate text to the other language
-    translated_text = traducir_texto(text, 
-                                   source_lang='es' if language == 'spanish' else 'en',
-                                   target_lang='en' if language == 'spanish' else 'es')
-    
-    # Prepare data structure for JSON
-    json_entry = {}
+    # Translate text, author, and themes
+    translated_text = translate_text(text)
+    translated_author = translate_text(author)
+    translated_theme = translate_text(themes) if themes else ""
+
+    # Prepare Spanish and English entries
+    spanish_entry = {}
+    english_entry = {}
+
     if language == "spanish":
-        json_entry["Oración"] = text
-        json_entry["Sentence"] = translated_text
+        # Spanish text is original
+        spanish_entry = {
+            "Oración": text,
+            "Autor": author,
+            "Temática": themes
+        }
+        english_entry = {
+            "Sentence": translated_text,
+            "Author": translated_author,
+            "Theme": translated_theme
+        }
     else:
-        json_entry["Sentence"] = text
-        json_entry["Oración"] = translated_text
-        
-    json_entry["Autor"] = author if author else None
+        # English text is original
+        english_entry = {
+            "Sentence": text,
+            "Author": author,
+            "Theme": themes
+        }
+        spanish_entry = {
+            "Oración": translated_text,
+            "Autor": translated_author,
+            "Temática": translated_theme
+        }
 
-    # Add themes to the appropriate "Temática" keys, up to three themes
-    for i, theme in enumerate(themes[:3], start=1):
-        json_entry[f"Temática {i}"] = theme if theme else None
+    # Remove empty values
+    spanish_entry = {k: v for k, v in spanish_entry.items() if v}
+    english_entry = {k: v for k, v in english_entry.items() if v}
 
-    # Remove keys with None values
-    json_entry = {k: v for k, v in json_entry.items() if v is not None}
+    # Save to respective files
+    save_to_json(spanish_entry, 'Sentences/Oraciones.json') # Hardcoded path for this project
+    save_to_json(english_entry, 'Sentences/Sentences.json') # Hardcoded path for this project
 
-    # Check if file exists; create if it doesn't
-    if not os.path.exists(file_path):
-        with open(file_path, 'w') as file:
-            json.dump([json_entry], file, indent=4)
+def save_to_json(entry, filename):
+    if not os.path.exists(filename):
+        data = [entry]
     else:
-        # Append to the existing JSON file
-        with open(file_path, 'r+') as file:
+        with open(filename, 'r', encoding='utf-8') as file:
             try:
                 data = json.load(file)
                 if not isinstance(data, list):
-                    raise ValueError("JSON file must contain an array of objects.")
+                    data = []
             except json.JSONDecodeError:
-                # File exists but is empty or invalid JSON; start a new array
                 data = []
             
-            data.append(json_entry)
-            file.seek(0)
-            json.dump(data, file, indent=4)
+            data.append(entry)
+
+    with open(filename, 'w', encoding='utf-8') as file:
+        json.dump(data, file, indent=4, ensure_ascii=False)
 
 # Example usage:
 submit_data = {

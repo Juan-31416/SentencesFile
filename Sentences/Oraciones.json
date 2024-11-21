@@ -1020,7 +1020,7 @@
     },
     {
         "Oración": "Si se ve bien, lo verás. Si suena bien, lo escucharás. Si está bien comercializado, lo comprarás. Pero si es verdad, lo sentirás",
-        "Autor": "Kid Rock", 
+        "Autor": "Kid Rock",
         "Temática": "Motivación"
     },
     {
@@ -2325,7 +2325,7 @@
     },
     {
         "Oración": "A veces quiero preguntarle a Dios por qué permite la pobreza, el hambre y la injusticia cuando podría hacer algo al respecto; pero me temo que podría hacerme la misma pregunta",
-        "Autor": "Abdu'l-Bahá", 
+        "Autor": "Abdu'l-Bahá",
         "Temática": "Desarrollo personal"
     },
     {
@@ -3582,5 +3582,10 @@
         "Oración": "Donde está la determinación, se puede encontrar el camino",
         "Autor": "George Samuel Clason",
         "Temática": "Motivación"
+    },
+    {
+        "Oración": "La maldad es algo inherente al ser humano, que debe aprender a controlarla",
+        "Autor": "Juan Pablo Martín Tejeiro",
+        "Temática": "Filosofía"
     }
 ]

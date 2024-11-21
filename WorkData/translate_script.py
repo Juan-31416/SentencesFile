@@ -1,35 +1,47 @@
 from googletrans import Translator
 
-def traducir_texto(texto):
-    # Crear una instancia del traductor
-    traductor = Translator()
+def translate_text(text, text_type='text'):
+    # Create a translator instance
+    translator = Translator()
 
-    # Detectar el idioma del texto
-    deteccion = traductor.detect(texto)
-    idioma_origen = deteccion.lang
+    # Skip translation for empty strings
+    if not text or text.strip() == '':
+        return text
 
-    # Determinar el idioma al que se va a traducir
-    if idioma_origen == 'es':
-        idioma_destino = 'en'
-    elif idioma_origen == 'en':
-        idioma_destino = 'es'
+    # Detect the text language
+    detection = translator.detect(text)
+    source_language = detection.lang
+
+    # Handle specific text types
+    if text_type == 'author':
+        # For author, translate between "Autor" and "Author"
+        return "Author" if source_language == 'es' else "Autor"
+    elif text_type == 'theme':
+        # For theme, translate between "Temática" and "Theme"
+        return "Theme" if source_language == 'es' else "Temática"
+
+    # Determine the target language for regular text
+    if source_language == 'es':
+        target_language = 'en'
+    elif source_language == 'en':
+        target_language = 'es'
     else:
-        return "Idioma no soportado. Solo se soportan textos en inglés o español."
+        return "Language not supported. Only English or Spanish texts are supported."
 
-    # Traducir el texto
-    traduccion = traductor.translate(texto, src=idioma_origen, dest=idioma_destino)
-    return traduccion.text
+    # Translate the text
+    translation = translator.translate(text, src=source_language, dest=target_language)
+    return translation.text
 
-# Ejemplo de uso
+# Usage example
 if __name__ == "__main__":
-    # Simulando que el texto proviene de otro script
-    texto = "Hola, ¿cómo estás?"
-    texto_traducido = traducir_texto(texto)
-    print("Texto original:", texto)
-    print("Texto traducido:", texto_traducido)
+    # Simulating text coming from another script
+    text = "Hola, ¿cómo estás?"
+    translated_text = translate_text(text)
+    print("Original text:", text)
+    print("Translated text:", translated_text)
 
-    # Otro ejemplo con inglés
-    texto = "Hello, how are you?"
-    texto_traducido = traducir_texto(texto)
-    print("Texto original:", texto)
-    print("Texto traducido:", texto_traducido)
+    # Another example with English
+    text = "Hello, how are you?"
+    translated_text = translate_text(text)
+    print("Original text:", text)
+    print("Translated text:", translated_text)

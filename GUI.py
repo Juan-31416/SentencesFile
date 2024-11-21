@@ -1,11 +1,11 @@
 import ttkbootstrap as ttk
 from ttkbootstrap.constants import *
 from tkinter import StringVar, Menu
-from add_data_to_file import add_data_to_json  # This is the function to add data to the JSON file
+from WorkData.add_data_to_file import add_data_to_file  # This is the function to add data to the JSON file
 import os
 import yaml
-from PopupWindow.OpenDirectory import browse_file
-from languages.load_languages import load_all_languages
+#from PopupWindow.OpenDirectory import browse_file
+from Languages.load_languages import load_all_languages
 from Styles.GUI_Styles import configure_styles
 
 
@@ -33,28 +33,33 @@ class SimpleGUI:
         self.create_theme_menu()
         self.create_submit_button()
 
+        self.selected_path = None  # Add this line to store the selected path
+
     def create_menu(self):
         # Create the menu bar
         self.menubar = Menu(self.root)
         self.root.config(menu=self.menubar)
 
         # Create and add menu items
-        self.path_menu = Menu(self.menubar, tearoff=0)
+        #self.path_menu = Menu(self.menubar, tearoff=0) # Hardcoded path for this project
         self.language_menu = Menu(self.menubar, tearoff=0)
         self.help_menu = Menu(self.menubar, tearoff=0)
 
         # Store menu references for later language updates
         self.menu_cascades = {
-            "path_menu": self.menubar.add_cascade(label=self.languages[self.current_language]["path_menu"], menu=self.path_menu),
+            #"path_menu": self.menubar.add_cascade(label=self.languages[self.current_language]["path_menu"], menu=self.path_menu), # Hardcoded path for this project
             "language_menu": self.menubar.add_cascade(label=self.languages[self.current_language]["language_menu"], menu=self.language_menu),
             "help_menu": self.menubar.add_cascade(label=self.languages[self.current_language]["help_menu"], menu=self.help_menu)
         }
 
+        # Hardcoded path for this project
+        '''
         # Add path menu items
         self.path_menu.add_command(
             label=self.languages[self.current_language]["open_directory"], 
-            command=lambda: browse_file()
+            command=self.select_directory
         )
+        '''
 
         # Add language options dynamically
         for language in self.languages.keys():
@@ -111,17 +116,15 @@ class SimpleGUI:
     def create_theme_menu(self):
         # Get themes from current language
         self.themes = self.languages[self.current_language].get("themes", [])
-        self.theme_vars = []
-
-        # Create OptionMenu widget for theme
-        theme_var = StringVar(value=self.themes[0])
-        self.theme_vars = [theme_var]  # Keep as list for compatibility
+        
+        # Create single theme variable
+        self.theme_var = StringVar(value=self.themes[0])
         
         # Create and configure style for OptionMenu
         self.style.configure("Custom.TMenubutton", font=("Roboto", 10))
         self.theme_menu = ttk.OptionMenu(
-            self.author_entry.master,  # Use the same frame as author entry
-            theme_var, 
+            self.author_entry.master,
+            self.theme_var, 
             self.themes[0],
             *self.themes,
             style="Custom.TMenubutton"
@@ -139,11 +142,21 @@ class SimpleGUI:
         )
         self.submit_button.pack(pady=20)
 
+    # Hardcoded path for this project
+    '''
+    def select_directory(self):
+        """Wrapper for browse_file that stores the selected path"""
+        self.selected_path = browse_file()
+        print(f"Selected path: {self.selected_path}")  # Debug print
+    '''
+
     def submit_data(self):
-        # Extract data and handle presentation
         data = self.extract_data()
         try:
-            add_data_to_json(data)
+            '''if self.selected_path is None:
+                raise ValueError("No file path selected")'''
+            add_data_to_file(data) #, self.selected_path)  # Hardcoded path for this project
+            print(f"Data added to file: {data}")
         except Exception as e:
             print(f"Error adding data to file: {e}")
         self.clear_form()
@@ -153,15 +166,14 @@ class SimpleGUI:
         return {
             "text": self.text_entry.get("1.0", ttk.END).strip(),
             "author": self.author_entry.get().strip(),
-            "themes": [theme_var.get() for theme_var in self.theme_vars],
+            "theme": self.theme_var.get(),
         }
 
     def clear_form(self):
         # Clear the form after submission
         self.text_entry.delete("1.0", ttk.END)
         self.author_entry.delete(0, ttk.END)
-        for theme_var in self.theme_vars:
-            theme_var.set(self.themes[0])
+        self.theme_var.set(self.themes[0])
 
     def change_language(self, language):
         """Updates the GUI text elements to the selected language"""
@@ -187,12 +199,12 @@ class SimpleGUI:
         # Update theme menu
         self.themes = translations.get("themes", [])
         if self.themes:
-            self.theme_vars[0].set(self.themes[0])
+            self.theme_var.set(self.themes[0])
             menu = self.theme_menu["menu"]
             menu.delete(0, "end")
             for theme in self.themes:
                 menu.add_command(label=theme, 
-                               command=lambda t=theme: self.theme_vars[0].set(t))
+                               command=lambda t=theme: self.theme_var.set(t))
         
         # Update language menu items
         for i, lang in enumerate(self.languages.keys()):
