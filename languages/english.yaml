@@ -4,4 +4,26 @@ author: "Author"
 output: "Output"
 submit: "Submit"
 documentation: "Documentation"
-about: "About" 
+about: "About"
+themes:
+  - Culture
+  - Personal Development
+  - Economy
+  - Entrepreneurship
+  - Finance
+  - Philosophy
+  - History
+  - Liberalism
+  - Mindset
+  - Moral
+  - Motivation
+  - Business
+  - Politics
+  - Psychology
+  - Relationships
+path_menu: "Path"
+language_menu: "Language"
+help_menu: "Help"
+open_directory: "Open Directory" 
+language_english: "English"
+language_spanish: "Spanish"

@@ -1,58 +1,64 @@
-import tkinter as tk
-from tkinter import StringVar, Radiobutton, Menu
+import ttkbootstrap as ttk
+from ttkbootstrap.constants import *
+from tkinter import StringVar, Menu
 from add_data_to_file import add_data_to_json  # This is the function to add data to the JSON file
 import os
 import yaml
+from PopupWindow.OpenDirectory import browse_file
+from languages.load_languages import load_all_languages
 
 
 class SimpleGUI:
     def __init__(self, root):
         self.root = root
+        self.style = ttk.Style("cosmo")  # You can change the theme to "darkly", "flatly", "solar", among others
+        self.configure_custom_styles()
         
         # Load available languages and their translations
-        self.languages = {}
-        self.load_all_languages()
-        self.current_language = "english"  # Default language
+        self.languages = load_all_languages()
+        self.current_language = "spanish"  # Default language
         
         self.root.title(self.languages[self.current_language]["window_title"])
-        
+
         # Set icon if available
         icon_path = "./SentencesFile/app_icon.png"
         if os.path.exists(icon_path):
-            self.root.iconphoto(True, tk.PhotoImage(file=icon_path))
+            self.root.iconphoto(True, ttk.PhotoImage(file="app_icon.png"))
 
-        # Create all components of the GUI
+        # Create all GUI components
         self.create_menu()
         self.create_text_entry()
         self.create_author_entry()
         self.create_theme_menu()
-        self.create_output_format()
         self.create_submit_button()
 
-    def load_all_languages(self):
-        """Load all language files from the languages directory"""
-        languages_dir = "languages"
-        try:
-            for filename in os.listdir(languages_dir):
-                if filename.endswith('.yaml'):
-                    language_name = filename[:-5].lower()  # Remove .yaml and convert to lowercase
-                    file_path = os.path.join(languages_dir, filename)
-                    with open(file_path, 'r', encoding='utf-8') as file:
-                        self.languages[language_name] = yaml.safe_load(file)
-        except Exception as e:
-            print(f"Error loading language files: {e}")
-            # Provide basic fallback
-            self.languages = {
-                "english": {
-                    "window_title": "Text Input GUI",
-                    "insert_text": "Insert text here",
-                    "author": "Author",
-                    "output": "Output",
-                    "submit": "Submit",
-                    "documentation": "Documentation",
-                    "about": "About"
-                }
-            }
+    def configure_custom_styles(self):
+        """Configure custom styles for widgets"""
+        # Configure modern fonts
+        default_font = ("Roboto", 10)
+        header_font = ("Roboto", 12, "bold")
+        
+        self.style.configure("TLabel", font=default_font)
+        self.style.configure("TButton", 
+            font=default_font,
+            padding=10,
+            borderwidth=0,
+            borderradius=8
+        )
+        
+        # Custom submit button style
+        self.style.configure("Submit.TButton",
+            font=header_font,
+            padding=10,
+            borderwidth=0,
+            borderradius=8,
+            background="#00A3E0",
+            foreground="white"
+        )
+        self.style.map("Submit.TButton",
+            background=[("active", "#0088BF"), ("disabled", "#CCE5FF")],
+            foreground=[("disabled", "#666666")]
+        )
 
     def create_menu(self):
         # Create the menu bar
@@ -64,115 +70,128 @@ class SimpleGUI:
         self.language_menu = Menu(self.menubar, tearoff=0)
         self.help_menu = Menu(self.menubar, tearoff=0)
 
-        self.menubar.add_cascade(label="Path", menu=self.path_menu)
-        self.menubar.add_cascade(label="Language", menu=self.language_menu)
-        self.menubar.add_cascade(label="Help", menu=self.help_menu)
+        # Store menu references for later language updates
+        self.menu_cascades = {
+            "path_menu": self.menubar.add_cascade(label=self.languages[self.current_language]["path_menu"], menu=self.path_menu),
+            "language_menu": self.menubar.add_cascade(label=self.languages[self.current_language]["language_menu"], menu=self.language_menu),
+            "help_menu": self.menubar.add_cascade(label=self.languages[self.current_language]["help_menu"], menu=self.help_menu)
+        }
 
-        # Add some example menu items (you can customize these)
-        self.path_menu.add_command(label="Open Directory")
-        self.path_menu.add_command(label="Set Output extension")
+        # Add path menu items
+        self.path_menu.add_command(
+            label=self.languages[self.current_language]["open_directory"], 
+            command=lambda: browse_file()
+        )
 
-        # Add language options dynamically based on available language files
+        # Add language options dynamically
         for language in self.languages.keys():
-            # Capitalize first letter for display
-            display_name = language.capitalize()
+            display_name = self.languages[self.current_language].get(f"language_{language}", language.capitalize())
             self.language_menu.add_command(
                 label=display_name, 
                 command=lambda lang=language: self.change_language(lang)
             )
 
-        self.help_menu.add_command(label="Documentation")
-        self.help_menu.add_command(label="About")
+        # Add help menu items
+        self.help_menu.add_command(label=self.languages[self.current_language]["documentation"])
+        self.help_menu.add_command(label=self.languages[self.current_language]["about"])
 
     def create_text_entry(self):
-        # Create a frame to hold the text widget and scrollbar
-        text_frame = tk.Frame(self.root)
-        text_frame.pack(fill=tk.BOTH, expand=True, padx=10, pady=5)
-
-        # Create label inside the frame
-        self.text_label = tk.Label(text_frame, text="Insert text here", justify=tk.LEFT)
-        self.text_label.grid(row=0, column=0, sticky="w", padx=10)
-
-        # Create the text widget and scrollbar
-        self.text_entry = tk.Text(text_frame, height=5)
-        scrollbar = tk.Scrollbar(text_frame, orient='vertical', command=self.text_entry.yview)
+        text_frame = ttk.Frame(self.root)
+        text_frame.pack(fill=BOTH, expand=True, padx=10, pady=10)
+        
+        self.text_label = ttk.Label(
+            text_frame,
+            text="Insert text here",
+            justify=LEFT,
+            font=("Roboto", 12)
+        )
+        self.text_label.grid(row=0, column=0, sticky="w", padx=5, pady=(0, 5))
+        
+        self.text_entry = ttk.Text(
+            text_frame,
+            height=5,
+            font=("Roboto", 10),
+            relief="flat"
+        )
+        scrollbar = ttk.Scrollbar(text_frame, orient='vertical', command=self.text_entry.yview)
         self.text_entry.configure(yscrollcommand=scrollbar.set)
 
-        # Pack the text widget and scrollbar using grid
-        self.text_entry.grid(row=1, column=0, columnspan=2, sticky="nsew")
+        # Organize the text widget and scrollbar with grid
+        self.text_entry.grid(row=1, column=0, columnspan=2, sticky="nsew", padx=10, pady=5)
         scrollbar.grid(row=1, column=2, sticky="ns")
 
-        # Allow grid resizing
+        # Allow resizing
         text_frame.grid_rowconfigure(1, weight=1)
         text_frame.grid_columnconfigure(0, weight=1)
 
     def create_author_entry(self):
-        # Author entry
-        self.author_label = tk.Label(self.root, text="Author", justify=tk.LEFT)
-        self.author_label.pack(anchor=tk.W, padx=10)
-        self.author_entry = tk.Entry(self.root)
-        self.author_entry.pack(fill=tk.X, padx=10)
+        # Create a frame to hold both author entry and theme menu
+        author_theme_frame = ttk.Frame(self.root)
+        author_theme_frame.pack(fill=X, padx=10, pady=10)
+        
+        # Author label and entry (left side)
+        self.author_label = ttk.Label(author_theme_frame, text="Author", justify=LEFT, font=("Roboto", 12))
+        self.author_label.pack(side=LEFT)
+        self.author_entry = ttk.Entry(author_theme_frame, font=("Roboto", 10))
+        self.author_entry.pack(side=LEFT, fill=X, expand=True, padx=(10, 20))
 
     def create_theme_menu(self):
-        # Create a frame to hold the theme menus horizontally
-        theme_frame = tk.Frame(self.root)
-        theme_frame.pack(pady=20)  # Add vertical padding
+        # Get themes from current language
+        self.themes = self.languages[self.current_language].get("themes", [])
+        self.theme_vars = []
+
+        # Create OptionMenu widget for theme
+        theme_var = StringVar(value=self.themes[0])
+        self.theme_vars = [theme_var]  # Keep as list for compatibility
         
-        # List of themes
-        self.themes = ["Theme 1", "Theme 2", "Theme 3", "Theme 4", "Theme 5"]
-        self.theme_vars = []  # List to store StringVar objects
-
-        # Create OptionMenu widgets for themes
-        for i in range(3):
-            theme_var = StringVar(value=self.themes[0])  # Default to first theme
-            self.theme_vars.append(theme_var)
-            theme_menu = tk.OptionMenu(theme_frame, theme_var, *self.themes)
-            theme_menu.pack(side=tk.LEFT)
-
-    def create_output_format(self):
-        # Output format options
-        self.output_format_label = tk.Label(self.root, text="Output")
-        self.output_format_label.pack()
-        self.output_format_var = StringVar(value="json")
-
-        self.json_radio = Radiobutton(self.root, text="json", variable=self.output_format_var, value="json")
-        self.json_radio.pack()
-
-        self.yaml_radio = Radiobutton(self.root, text="yaml", variable=self.output_format_var, value="yaml")
-        self.yaml_radio.pack()
+        # Create and configure style for OptionMenu
+        self.style.configure("Custom.TMenubutton", font=("Roboto", 10))
+        self.theme_menu = ttk.OptionMenu(
+            self.author_entry.master,  # Use the same frame as author entry
+            theme_var, 
+            self.themes[0],
+            *self.themes,
+            style="Custom.TMenubutton"
+        )
+        self.theme_menu.pack(side=RIGHT)
 
     def create_submit_button(self):
-        # Button to submit data
-        self.submit_button = tk.Button(self.root, text="Submit", command=self.submit_data, font=('Arial', 14, 'bold'), width=20, height=2)
-        self.submit_button.pack(pady=10)
+        # Modern submit button with custom style
+        self.submit_button = ttk.Button(
+            self.root,
+            text="Submit",
+            command=self.submit_data,
+            style="Submit.TButton",
+            width=20
+        )
+        self.submit_button.pack(pady=20)
 
     def submit_data(self):
-        # Extract data and handle submission
+        # Extract data and handle presentation
         data = self.extract_data()
         try:
             add_data_to_json(data)
         except Exception as e:
-            print(f"Error al añadir datos al archivo: {e}")
+            print(f"Error adding data to file: {e}")
         self.clear_form()
 
     def extract_data(self):
         # Extract data from the form
         return {
-            "text": self.text_entry.get("1.0", tk.END).strip(),
+            "text": self.text_entry.get("1.0", ttk.END).strip(),
             "author": self.author_entry.get().strip(),
             "themes": [theme_var.get() for theme_var in self.theme_vars],
-            "output_format": self.output_format_var.get()
         }
 
     def clear_form(self):
         # Clear the form after submission
-        self.text_entry.delete("1.0", tk.END)
-        self.author_entry.delete(0, tk.END)
+        self.text_entry.delete("1.0", ttk.END)
+        self.author_entry.delete(0, ttk.END)
         for theme_var in self.theme_vars:
             theme_var.set(self.themes[0])
 
     def change_language(self, language):
-        """Update the GUI text elements to the selected language"""
+        """Updates the GUI text elements to the selected language"""
         self.current_language = language
         translations = self.languages[language]
         
@@ -180,15 +199,35 @@ class SimpleGUI:
         self.root.title(translations["window_title"])
         self.text_label.config(text=translations["insert_text"])
         self.author_label.config(text=translations["author"])
-        self.output_format_label.config(text=translations["output"])
         self.submit_button.config(text=translations["submit"])
         
-        # Update menu items
-        self.help_menu.entryconfig(0, label=translations["documentation"])
-        self.help_menu.entryconfig(1, label=translations["about"])
+        # Update menu labels
+        self.menubar.entryconfigure(0, label=translations["path_menu"])  # Path menu
+        self.menubar.entryconfigure(1, label=translations["language_menu"])  # Language menu
+        self.menubar.entryconfigure(2, label=translations["help_menu"])  # Help menu
+        
+        # Update submenu items
+        self.path_menu.entryconfigure(0, label=translations["open_directory"])
+        self.help_menu.entryconfigure(0, label=translations["documentation"])
+        self.help_menu.entryconfigure(1, label=translations["about"])
+        
+        # Update theme menu
+        self.themes = translations.get("themes", [])
+        if self.themes:
+            self.theme_vars[0].set(self.themes[0])
+            menu = self.theme_menu["menu"]
+            menu.delete(0, "end")
+            for theme in self.themes:
+                menu.add_command(label=theme, 
+                               command=lambda t=theme: self.theme_vars[0].set(t))
+        
+        # Update language menu items
+        for i, lang in enumerate(self.languages.keys()):
+            display_name = translations.get(f"language_{lang}", lang.capitalize())
+            self.language_menu.entryconfigure(i, label=display_name)
 
 
 # Run the GUI
-root = tk.Tk()
+root = ttk.Window(themename="cosmo")
 app = SimpleGUI(root)
 root.mainloop()

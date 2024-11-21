@@ -4,4 +4,26 @@ author: "Autor"
 output: "Salida"
 submit: "Enviar"
 documentation: "Documentación"
-about: "Acerca de" 
+about: "Acerca de"
+themes:
+  - Cultura
+  - Desarrollo personal
+  - Economía
+  - Emprendimiento
+  - Finanzas
+  - Filosofía
+  - Historia
+  - Liberalismo
+  - Mentalidad
+  - Moral
+  - Motivación
+  - Negocios
+  - Política
+  - Psicología
+  - Relaciones
+path_menu: "Ruta"
+language_menu: "Idioma"
+help_menu: "Ayuda"
+open_directory: "Abrir Directorio"
+language_english: "Inglés"
+language_spanish: "Español"
