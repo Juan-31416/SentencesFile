@@ -3587,5 +3587,50 @@
         "Oración": "La maldad es algo inherente al ser humano, que debe aprender a controlarla",
         "Autor": "Juan Pablo Martín Tejeiro",
         "Temática": "Filosofía"
+    },
+    {
+        "Oración": "Todo lo que haces, debe hacerse por un bien mayor.",
+        "Autor": "Juan Pablo Martín Tejeiro",
+        "Temática": "Filosofía"
+    },
+    {
+        "Oración": "La riqueza es la capacidad de experimentar plenamente la vida.",
+        "Autor": "Anónimo",
+        "Temática": "Desarrollo personal"
+    },
+    {
+        "Oración": "Muchas personas piensan que no son buenos para ganar dinero, cuando lo que no saben es cómo usarlo",
+        "Autor": "Frank A. Clark",
+        "Temática": "Finanzas"
+    },
+    {
+        "Oración": "Los buenos artistas copian, los grandes artistas roban.",
+        "Autor": "Pablo Picasso",
+        "Temática": "Mentalidad"
+    },
+    {
+        "Oración": "El miedo es libre de crear, que es lo que lo hace tan rentable.",
+        "Autor": "Nathan Latka",
+        "Temática": "Negocios"
+    },
+    {
+        "Oración": "Hice mi dinero vendiendo demasiado pronto",
+        "Autor": "Bernard Baruch",
+        "Temática": "Finanzas"
+    },
+    {
+        "Oración": "Tienes que ser comprado, no vendido",
+        "Autor": "Dicho popular",
+        "Temática": "Mentalidad"
+    },
+    {
+        "Oración": "La fortuna se alza con el que se atreve",
+        "Autor": "Virgil",
+        "Temática": "Motivación"
+    },
+    {
+        "Oración": "Invierta en empresas que cualquier idiota podría ejecutar, porque algún día uno lo hará",
+        "Autor": "Peter Lynch",
+        "Temática": "Negocios"
     }
 ]

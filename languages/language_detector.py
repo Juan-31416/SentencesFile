@@ -8,9 +8,10 @@ def detect_language(text):
         elif language == 'en':
             return "english"
         else:
-            return "unsupported language"
+            return "english"
     except Exception as e:
-        return f"Error detecting language: {e}"
+        print(f"Language detection error: {e}")
+        return "english"
 
 # Example usage with text returned by another script
 text = "Este es un ejemplo de texto en español."

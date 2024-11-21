@@ -1,0 +1,55 @@
+english:
+  title: "Documentation"
+  content: |
+    How to use this application:
+
+    1. Text Entry
+       - Enter your text in the main text box
+       - You can write multiple lines
+       - The text box is scrollable
+
+    2. Author
+       - Enter the author's name in the author field
+       - This field is required
+
+    3. Theme Selection
+       - Choose a theme from the dropdown menu
+       - Themes help categorize your entries
+
+    4. Language Selection
+       - Change the interface language from the Language menu
+       - All text will update automatically
+
+    5. Submitting
+       - Click the Submit button to save your entry
+       - The form will clear automatically after successful submission
+
+    Note: All entries are saved to a JSON file in your project directory.
+
+spanish:
+  title: "Documentación"
+  content: |
+    Cómo usar esta aplicación:
+
+    1. Entrada de Texto
+       - Ingrese su texto en el cuadro de texto principal
+       - Puede escribir múltiples líneas
+       - El cuadro de texto tiene desplazamiento
+
+    2. Autor
+       - Ingrese el nombre del autor en el campo de autor
+       - Este campo es obligatorio
+
+    3. Selección de Tema
+       - Elija un tema del menú desplegable
+       - Los temas ayudan a categorizar sus entradas
+
+    4. Selección de Idioma
+       - Cambie el idioma de la interfaz desde el menú Idioma
+       - Todo el texto se actualizará automáticamente
+
+    5. Envío
+       - Haga clic en el botón Enviar para guardar su entrada
+       - El formulario se limpiará automáticamente después de un envío exitoso
+
+    Nota: Todas las entradas se guardan en un archivo JSON en el directorio de su proyecto. 

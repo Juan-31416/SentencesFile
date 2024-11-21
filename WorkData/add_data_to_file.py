@@ -7,52 +7,60 @@ def add_data_to_file(data):
     # Extract information from the input dictionary
     text = data.get('text', '').strip()
     author = data.get('author', '').strip()
-    themes = data.get('theme', '')
+    theme = data.get('theme', '')  # Single theme
+
+    if not text or not author or not theme:
+        raise ValueError("Missing required fields")
 
     # Determine if the text is in Spanish or English
-    language = detect_language(text)  # "spanish" or "english" expected
+    language = detect_language(text)
+    if not language:
+        print("Language not detected, defaulting to English")
+        language = "english"  # Default fallback
     
-    # Translate text, author, and themes
-    translated_text = translate_text(text)
-    translated_author = translate_text(author)
-    translated_theme = translate_text(themes) if themes else ""
+    try:
+        # Translate text and author
+        translated_text = translate_text(text, text_type='text')
+        translated_author = translate_text(author, text_type='author')
 
-    # Prepare Spanish and English entries
-    spanish_entry = {}
-    english_entry = {}
+        # Handle theme translation based on the source language
+        if language == "spanish":
+            # If original text is Spanish, theme is in Spanish and needs translation to English
+            translated_theme = translate_text(theme, text_type='theme')
+            spanish_entry = {
+                "Oración": text,
+                "Autor": author,
+                "Temática": theme  # Original Spanish theme
+            }
+            english_entry = {
+                "Sentence": translated_text,
+                "Author": translated_author,
+                "Theme": translated_theme  # Translated to English
+            }
+        else:
+            # If original text is English, theme is in English and needs translation to Spanish
+            translated_theme = translate_text(theme, text_type='theme')
+            english_entry = {
+                "Sentence": text,
+                "Author": author,
+                "Theme": theme  # Original English theme
+            }
+            spanish_entry = {
+                "Oración": translated_text,
+                "Autor": translated_author,
+                "Temática": translated_theme  # Translated to Spanish
+            }
 
-    if language == "spanish":
-        # Spanish text is original
-        spanish_entry = {
-            "Oración": text,
-            "Autor": author,
-            "Temática": themes
-        }
-        english_entry = {
-            "Sentence": translated_text,
-            "Author": translated_author,
-            "Theme": translated_theme
-        }
-    else:
-        # English text is original
-        english_entry = {
-            "Sentence": text,
-            "Author": author,
-            "Theme": themes
-        }
-        spanish_entry = {
-            "Oración": translated_text,
-            "Autor": translated_author,
-            "Temática": translated_theme
-        }
+        # Create Sentences directory if it doesn't exist
+        os.makedirs('Sentences', exist_ok=True)
 
-    # Remove empty values
-    spanish_entry = {k: v for k, v in spanish_entry.items() if v}
-    english_entry = {k: v for k, v in english_entry.items() if v}
-
-    # Save to respective files
-    save_to_json(spanish_entry, 'Sentences/Oraciones.json') # Hardcoded path for this project
-    save_to_json(english_entry, 'Sentences/Sentences.json') # Hardcoded path for this project
+        # Save to respective files
+        save_to_json(spanish_entry, 'Sentences/Oraciones.json')
+        save_to_json(english_entry, 'Sentences/Sentences.json')
+        
+    except Exception as e:
+        print(f"Error in add_data_to_file: {e}")
+        raise
 
 def save_to_json(entry, filename):
     if not os.path.exists(filename):

@@ -1,0 +1,35 @@
+english:
+  title: "About"
+  content: |
+    Text Collection App
+    Version 1.0.0
+
+    A simple application for collecting and organizing text entries with their authors 
+    and themes. Perfect for gathering quotes, thoughts, or any text-based content.
+
+    Features:
+    - Multi-language support
+    - Theme categorization
+    - Clean and modern interface
+    - Automatic data saving
+
+    Created with Python and ttkbootstrap
+    © 2024 All rights reserved
+
+spanish:
+  title: "Acerca de"
+  content: |
+    Aplicación de Colección de Textos
+    Versión 1.0.0
+
+    Una aplicación simple para recopilar y organizar entradas de texto con sus autores 
+    y temas. Perfecta para recopilar citas, pensamientos o cualquier contenido basado en texto.
+
+    Características:
+    - Soporte multilingüe
+    - Categorización por temas
+    - Interfaz limpia y moderna
+    - Guardado automático de datos
+
+    Creado con Python y ttkbootstrap
+    © 2024 Todos los derechos reservados 

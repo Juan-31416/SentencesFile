@@ -17,17 +17,36 @@ def load_all_languages():
         print(f"Error loading language files: {e}")
         # Provide a basic fallback
         return {
-            "english": {
-                "window_title": "Text Input GUI",
-                "insert_text": "Insert text here",
-                "author": "Author",
-                "output": "Output",
-                "submit": "Submit",
-                "documentation": "Documentation",
-                "about": "About",
-                "path_menu": "Path",
-                "language_menu": "Language",
-                "help_menu": "Help",
-                "open_directory": "Open Directory"
+            "Spanish": {
+                "window_title": "Interfaz de Entrada de Texto",
+                "insert_text": "Insertar texto aquí",
+                "author": "Autor",
+                "output": "Salida",
+                "submit": "Enviar",
+                "documentation": "Documentación",
+                "about": "Acerca de",
+                "themes": [
+                    "Cultura",
+                    "Desarrollo personal",
+                    "Economía",
+                    "Emprendimiento",
+                    "Finanzas",
+                    "Filosofía",
+                    "Historia",
+                    "Liberalismo",
+                    "Mentalidad",
+                    "Moral",
+                    "Motivación",
+                    "Negocios",
+                    "Política",
+                    "Psicología",
+                    "Relaciones",
+                ],
+                "path_menu": "Ruta",
+                "language_menu": "Idioma",
+                "help_menu": "Ayuda",
+                "open_directory": "Abrir Directorio",
+                "language_english": "Inglés",
+                "language_spanish": "Español"
             }
         } 
