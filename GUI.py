@@ -1,12 +1,23 @@
+import sys
+import os
 import ttkbootstrap as ttk
 from ttkbootstrap.constants import *
 from tkinter import StringVar, Menu, messagebox
 from WorkData.add_data_to_file import add_data_to_file  # This is the function to add data to the JSON file
-import os
 import yaml
 from Languages.load_languages import load_all_languages  # Import function to load language translations from YAML files
 from Styles.GUI_Styles import configure_styles  # Import function to configure custom styles for the GUI elements
 
+def resource_path(relative_path):
+    """Get the absolute path to the resource, considering packaging."""
+    if hasattr(sys, '_MEIPASS'):
+        # When packaged with PyInstaller
+        path = os.path.join(sys._MEIPASS, relative_path)
+    else:
+        path = os.path.join(os.path.abspath("."), relative_path)
+    
+    print(f"Resource path for {relative_path}: {path}")  # Debugging statement
+    return path
 
 class SimpleGUI:
     def __init__(self, root):
@@ -16,7 +27,9 @@ class SimpleGUI:
         configure_styles(self.style)
         
         # Load available languages and their translations
-        self.languages = load_all_languages()
+        languages_path = resource_path("Languages")
+        print(f"Languages path: {languages_path}")  # Debugging statement
+        self.languages = load_all_languages()  # Adjust this based on your function definition
         self.current_language = "spanish"  # Default language
         
         # Set window properties
@@ -43,13 +56,16 @@ class SimpleGUI:
     def load_help_content(self):
         """Load documentation and about content from YAML files"""
         try:
-            # Load documentation and about content from respective YAML files
-            with open('Help/documentation.yaml', 'r', encoding='utf-8') as doc_file:
+            # Use resource_path to load YAML files
+            doc_path = resource_path('Help/documentation.yaml')
+            about_path = resource_path('Help/about.yaml')
+            print(f"Documentation path: {doc_path}")  # Debugging statement
+            print(f"About path: {about_path}")  # Debugging statement
+            with open(doc_path, 'r', encoding='utf-8') as doc_file:
                 self.documentation = yaml.safe_load(doc_file)
-            with open('Help/about.yaml', 'r', encoding='utf-8') as about_file:
+            with open(about_path, 'r', encoding='utf-8') as about_file:
                 self.about = yaml.safe_load(about_file)
         except Exception as e:
-            # Handle errors if files are not available or loading fails
             print(f"Error loading help content: {e}")
             self.documentation = {"default": "Documentation not available"}
             self.about = {"default": "About information not available"}
