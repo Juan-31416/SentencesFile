@@ -22,3 +22,4 @@ texts = [
 for text in texts:
     result = detect_language(text)
     print(result)
+

@@ -10,3 +10,4 @@ def load_all_languages(languages_path):
                 language_name = os.path.splitext(filename)[0]
                 languages[language_name] = yaml.safe_load(file)
     return languages
+
