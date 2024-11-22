@@ -2,7 +2,7 @@ import json
 import os
 from typing import Dict
 import logging
-from Languages.language_detector import detect_language  # This is the language detector function
+from languages.language_detector import detect_language  # This is the language detector function
 from WorkData.translate_script import translate_text  # This is the translation function
 
 # Set up logging configuration

@@ -5,7 +5,7 @@ from ttkbootstrap.constants import *
 from tkinter import StringVar, Menu, messagebox
 from WorkData.add_data_to_file import add_data_to_file  # This is the function to add data to the JSON file
 import yaml
-from Languages.load_languages import load_all_languages  # Import function to load language translations from YAML files
+from languages.load_languages import load_all_languages  # Import function to load language translations from YAML files
 from Styles.GUI_Styles import configure_styles  # Import function to configure custom styles for the GUI elements
 
 def resource_path(relative_path):
