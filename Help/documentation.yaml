@@ -23,9 +23,17 @@ english:
     5. Submit
        - Click the Submit button to save your entry
        - The form will clear automatically after successful submission
+    
+    6. Keyboard Shortcuts
+       - Ctrl + S: Save the current entry
+       - Ctrl + Q: Quit the application
+       - Ctrl + TAB: Switch between text entries
+       - ALT: To access the menu bar
+       - ALT + F4: To close the application
 
     Note I: All entries are saved to a JSON file in your project directory.
-    Note II: The application will automatically translate the text to the other supported languages.
+
+    Note II: As a precaution, it is recommended to use the interface in English for English texts, and in Spanish for Spanish texts.
 
 spanish:
   title: "Documentación"
@@ -53,5 +61,13 @@ spanish:
        - Haga clic en el botón Enviar para guardar su entrada
        - El formulario se limpiará automáticamente después de un envío exitoso
 
+    6. Atajos de teclado
+       - Ctrl + S: Guardar la entrada actual
+       - Ctrl + Q: Salir de la aplicación
+       - Ctrl + TAB: Cambiar entre entradas de texto
+       - ALT: Para acceder a la barra de menú
+       - ALT + F4: Para cerrar la aplicación
+
     Nota I: Todas las entradas se guardan en un archivo JSON en el directorio de su proyecto. 
-    Nota II: La aplicación traduce automáticamente el texto al resto de idiomas que soporta.
+
+    Nota II: Por precaución, se recomienda utilizar la interfaz en inglés para textos en inglés, y en español para textos en español.

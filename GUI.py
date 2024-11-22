@@ -55,14 +55,20 @@ class SimpleGUI:
             self.about = {"default": "About information not available"}
 
     def show_info_message(self, content_key):
-        """Display information in a message box"""
+        """Display information in a message box with formatted content"""
         # Get the content based on the current language, fallback to default if necessary
-        content = str(content_key.get(self.current_language, content_key.get("default", "")))
-        # Replace newline escape sequences and remove unnecessary characters
-        formatted_text = content.replace("\\n", "\n").strip("{}'\"")
+        content_data = content_key.get(self.current_language, content_key.get("default", {}))
+        
+        # Extract title and content
+        title = content_data.get('title', '')
+        content = content_data.get('content', '')
+
+        # Format the text for display
+        formatted_text = f"{title}\n\n{content}".replace("\\n", "\n").strip("{}'\"")
+
         # Show the information in a message box
         messagebox.showinfo(
-            self.languages[self.current_language]["documentation"],
+            title,  # Use the title from the YAML content
             formatted_text
         )
 
