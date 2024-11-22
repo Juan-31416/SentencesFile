@@ -1,0 +1,20 @@
+187 INFO: PyInstaller: 6.11.1, contrib hooks: 2024.10
+187 INFO: Python: 3.11.3
+206 INFO: Platform: Windows-10-10.0.19045-SP0
+206 INFO: Python environment: D:\009 Github\SentencesFile\mi_entorno
+206 INFO: wrote D:\009 Github\SentencesFile\GUI.spec
+210 INFO: Module search paths (PYTHONPATH):
+['D:\\009 Github\\SentencesFile\\mi_entorno\\Scripts\\pyinstaller.exe',
+ 'C:\\Program Files\\Python311\\python311.zip',
+ 'C:\\Program Files\\Python311\\DLLs',
+ 'C:\\Program Files\\Python311\\Lib',
+ 'C:\\Program Files\\Python311',
+ 'D:\\009 Github\\SentencesFile\\mi_entorno',
+ 'D:\\009 Github\\SentencesFile\\mi_entorno\\Lib\\site-packages',
+ 'D:\\009 Github\\SentencesFile']
+516 INFO: Appending 'datas' from .spec
+517 INFO: checking Analysis
+583 INFO: checking PYZ
+621 INFO: checking PKG
+664 INFO: Bootloader D:\009 Github\SentencesFile\mi_entorno\Lib\site-packages\PyInstaller\bootloader\Windows-64bit-intel\run.exe
+664 INFO: checking EXE

@@ -10,12 +10,12 @@ from Styles.GUI_Styles import configure_styles  # Import function to configure c
 
 def resource_path(relative_path):
     """Get the absolute path to the resource, considering packaging."""
-    if hasattr(sys, '_MEIPASS'):
-        # When packaged with PyInstaller
-        path = os.path.join(sys._MEIPASS, relative_path)
-    else:
-        path = os.path.join(os.path.abspath("."), relative_path)
+    if getattr(sys, 'frozen', False):  # Check if running as an executable
+        base_path = sys._MEIPASS
+    else:  # Running as a script
+        base_path = os.path.dirname(__file__)
     
+    path = os.path.join(base_path, relative_path)
     print(f"Resource path for {relative_path}: {path}")  # Debugging statement
     return path
 
@@ -29,7 +29,7 @@ class SimpleGUI:
         # Load available languages and their translations
         languages_path = resource_path("Languages")
         print(f"Languages path: {languages_path}")  # Debugging statement
-        self.languages = load_all_languages()  # Adjust this based on your function definition
+        self.languages = load_all_languages(languages_path)  # Pass the path to the function
         self.current_language = "spanish"  # Default language
         
         # Set window properties
